@@ -2,3 +2,6 @@ __pycache__/satellite_camera.cpython-310.pyc
 __pycache__/satellite_packet.cpython-310.pyc
 __pycache__/satellite_process.cpython-310.pyc
 resource/capture.mp4
+camera_test.py
+out.txt
+out1.txt

@@ -3,6 +3,7 @@ from satellite_packet import ImagePacket
 from time import time
 import math
 from satellite_camera import Camera
+import struct
 
 class Satellite_Processor():
 
@@ -17,7 +18,8 @@ class Satellite_Processor():
     
     def satellite_process(self):
         image_packet = self.generate_image_packet()
-        image_size = len(image_packet).to_bytes(4, byteorder='big')
+        #image_size = len(image_packet).to_bytes(4, byteorder='big')
+        image_size = struct.pack('i', len(image_packet))
         return image_size, image_packet
 
     def get_image(self):
