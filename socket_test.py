@@ -17,15 +17,23 @@ class Satellite:
         self.client_socket.connect((self.HOST, self.PORT))
 
     def protocol(self, cnt):
-            
+            cnt = cnt + 1
             file_size, image = self.processor.satellite_process()
             
-            print("\nImage Send {}".format(cnt+1))
-            self.client_socket.send(file_size)
-            self.client_socket.sendall(image)
+            print("\nImage Send {}".format(cnt))
+            while True:
+                self.client_socket.send(file_size)
+                self.client_socket.sendall(image)
+                self.client_socket.settimeout(5.0)
+                ack = self.client_socket.recv(1)
+                if len(ack)>0:
+                    print("Got Response from SatGS : {}".format(ack))
+                    break
+                else :
+                    print("Got no response from SatGS... Retry to send image {}".format(cnt))
             
-            time.sleep(0.16)
-            return cnt + 1
+            # time.sleep(0.16)
+            return cnt
             
        
        
@@ -34,14 +42,19 @@ class Satellite:
         
 
 if __name__ == "__main__":
-    cnt = 0
-    print("Initializing Satellite")
-    satellite = Satellite()
-    print("Start Satellite Protocol")
-    while True : 
-        try :
-            cnt = satellite.protocol(cnt)
+    while True:
+        try:
+            cnt = 0
+            print("Initializing Satellite")
+            satellite = Satellite()
+            print("Start Satellite Protocol")
+            while True : 
+                try :
+                    cnt = satellite.protocol(cnt)
+                except Exception as e:
+                    print(repr(e))
+                    satellite.client_socket.close()
+                    break
         except Exception as e:
             print(repr(e))
-            break
-    satellite.client_socket.close()
+    
