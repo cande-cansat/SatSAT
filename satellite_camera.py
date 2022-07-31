@@ -11,7 +11,7 @@ class Camera():
         ret, frame = self.capture.read()
         if ret == True :
             # cv2.imshow('test',frame)
-            image_bytes = cv2.imencode('.bmp', frame)[1].tobytes()
+            image_bytes = cv2.imencode('.jpeg', frame)[1].tobytes()
             
             return image_bytes
         else :
